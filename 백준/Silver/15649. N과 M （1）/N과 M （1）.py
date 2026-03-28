@@ -9,4 +9,5 @@ for i in range(1,number+1):
 answer = list(permutations(numbers,size))
 
 for a in answer:
-    print(*a)
+    print(' '.join(map(str,a)))
+    
