@@ -1,0 +1,31 @@
+WITH FRONT_END AS (
+    -- Front End 카테고리 스킬들의 비트합 계산
+    SELECT SUM(CODE) AS CODE 
+    FROM SKILLCODES 
+    WHERE CATEGORY = 'Front End'
+),
+PYTHON AS (
+    SELECT CODE FROM SKILLCODES WHERE NAME = 'Python'
+),
+C_SHARP AS (
+    SELECT CODE FROM SKILLCODES WHERE NAME = 'C#'
+),
+GRADE_TABLE AS (
+    SELECT 
+        CASE 
+            -- A : Front End와 Python을 모두 보유
+            WHEN (SKILL_CODE & (SELECT CODE FROM FRONT_END)) 
+             AND (SKILL_CODE & (SELECT CODE FROM PYTHON)) THEN 'A'
+            -- B : C# 보유
+            WHEN (SKILL_CODE & (SELECT CODE FROM C_SHARP)) THEN 'B'
+            -- C : 그 외 Front End 보유
+            WHEN (SKILL_CODE & (SELECT CODE FROM FRONT_END)) THEN 'C'
+        END AS GRADE,
+        ID,
+        EMAIL
+    FROM DEVELOPERS
+)
+SELECT GRADE, ID, EMAIL
+FROM GRADE_TABLE
+WHERE GRADE IS NOT NULL
+ORDER BY GRADE ASC, ID ASC;
