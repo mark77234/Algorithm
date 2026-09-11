@@ -1,0 +1,8 @@
+# 중성화 거친 동물 정보
+# 보호소 나갈 당시 중성화된 동물
+# 아이디 순
+SELECT I.ANIMAL_ID,I.ANIMAL_TYPE,I.NAME
+FROM ANIMAL_OUTS O
+JOIN ANIMAL_INS I ON I.ANIMAL_ID = O.ANIMAL_ID
+WHERE I.SEX_UPON_INTAKE IN ('Intact Male' ,'Intact Female') AND O.SEX_UPON_OUTCOME IN ('Spayed Female','Neutered Male')
+ORDER BY I.ANIMAL_ID ASC;
