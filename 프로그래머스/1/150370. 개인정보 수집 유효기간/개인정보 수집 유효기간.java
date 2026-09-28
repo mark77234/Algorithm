@@ -29,9 +29,13 @@ class Solution {
             
         }
         
+        int[] result = new int[answer.size()];
         
+        for(int i = 0;i < answer.size();i++){
+            result[i] = answer.get(i);
+        }
         
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return result;
     }
     
     public static int getDate(String date){
