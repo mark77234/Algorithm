@@ -2,18 +2,17 @@ import java.util.*;
 
 public class Solution {
     public int[] solution(int []arr) {
-        List<Integer> list = new ArrayList<>();
+        Stack<Integer> stack = new Stack<>();
         
         for (int a: arr){
-            if (!list.isEmpty() && list.get(list.size()-1) == a){
+            if (!stack.isEmpty() && stack.peek() == a){
                 continue;
             }
             else{
-                list.add(a);    
+                stack.push(a);
             }
-            
         }
         
-        return list.stream().mapToInt(Integer::intValue).toArray();
+        return stack.stream().mapToInt(Integer::intValue).toArray();
     }
 }
