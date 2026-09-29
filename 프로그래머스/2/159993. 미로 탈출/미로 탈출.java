@@ -1,86 +1,70 @@
 import java.util.*;
-
 class Solution {
     public int solution(String[] maps) {
-        int answer = -1;
-        
-        int n = maps.length;
-        int m = maps[0].length();
-        
-        // 시작 지점 
         int[] start = new int[2];
-        // 레버 
         int[] lever = new int[2];
-        // 출구 
-        int[] end = new int[2];
+        int[] exit = new int[2];
         
-        // 시작 지점, 레버, 츨구 좌표 저장 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                char ch = maps[i].charAt(j);
-                
-                if (ch == 'S') {   
+        for (int i= 0 ; i < maps.length; i++){
+            for (int j = 0; j < maps[0].length();j++){
+                if (maps[i].charAt(j) == 'S'){
                     start[0] = i;
                     start[1] = j;
-                } else if (ch == 'L') { 
+                }
+                else if (maps[i].charAt(j) == 'L'){
                     lever[0] = i;
                     lever[1] = j;
-                } else if (ch == 'E') { 
-                    end[0] = i;
-                    end[1] = j;
+                }
+                else if (maps[i].charAt(j) == 'E'){
+                    exit[0] = i;
+                    exit[1] = j;
                 }
             }
         }
         
-        int a = bfs(maps, start, lever);
-        int b = bfs(maps, lever, end);
-
-        if (a != -1 && b != -1) {
-            answer = a + b;
-        } 
+        int a = bfs(maps,start,lever);
+        if (a == -1){
+            return -1;
+        }
+        int b = bfs(maps,lever,exit);
         
-        return answer;
+        if (b == -1){
+            return -1;
+        }
+        return a+b;
     }
     
-    public int bfs(String[] maps, int[] start, int[] end) {     
-        int n = maps.length;
-        int m = maps[0].length();
+    public static int bfs(String[] maps, int[] start, int[] end){
+        int[] dx = {0,0,1,-1};
+        int[] dy = {1,-1,0,0};
         
-        // 상, 하, 좌, 우 
-        int[] dx = {-1, 1, 0, 0};
-        int[] dy = {0, 0, -1, 1};
-                
-        Queue<int[]> q = new LinkedList<>(); 
-		int[][] visited = new int[n][m];   
-
-        int x = start[0];
-        int y = start[1];
+        Queue<int[]> q = new LinkedList<>();
+        int[][] visited = new int[maps.length][maps[0].length()];
         
-        q.add(new int[]{x, y});
-
-        while(!q.isEmpty()) {
-            int[] now = q.poll();
-            x = now[0];
-            y = now[1];
+        q.add(new int[]{start[0],start[1]});
+        
+        while (!q.isEmpty()){
+            int[] cur = q.poll();
             
-            if (x == end[0] && y == end[1]) {
+            int x = cur[0];
+            int y = cur[1];
+            
+            if (x == end[0] && y == end[1]){
                 return visited[x][y];
             }
             
-            for (int i = 0; i < 4; i++) {
+            for (int i= 0; i < 4; i++){
                 int nx = x + dx[i];
                 int ny = y + dy[i];
                 
-                // 미로의 범위 밖, 벽, 이미 방문한 경우 생략  
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m || maps[nx].charAt(ny) == 'X' || visited[nx][ny] > 0) {
+                if (nx <0 || nx >= maps.length || ny <0 || ny >= maps[0].length() || maps[nx].charAt(ny) ==  'X' || visited[nx][ny] > 0 ){
                     continue;
                 }
                 
-                // 이동 거리 +1
-                visited[nx][ny] = visited[x][y] + 1;    
-                q.add(new int[]{nx, ny});
+                visited[nx][ny] = visited[x][y] + 1;
+                q.add(new int[]{nx,ny});
             }
         }
         return -1;
-    } 
+    }
 }
